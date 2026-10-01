@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Swap Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-logo"><i class="fa-solid fa-people-arrows"></i></div>
+      <div>
+        <h1>Skill Swap Board</h1>
+        <p>Learn together, grow together</p>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal()">
+      <i class="fa-solid fa-plus"></i> Post a Skill
+    </button>
+  </header>
+
+  <main class="container">
+    <!-- Quick Stats -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-count" id="stat-all">0</span>
+        <span class="stat-label">Total Swaps</span>
+      </div>
+      <div class="stat-item stat-offer">
+        <span class="stat-count" id="stat-offers">0</span>
+        <span class="stat-label">Skills Offered</span>
+      </div>
+      <div class="stat-item stat-request">
+        <span class="stat-count" id="stat-requests">0</span>
+        <span class="stat-label">Skills Requested</span>
+      </div>
+    </section>
+
+    <!-- Filters & Search -->
+    <section class="filter-card">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" placeholder="Search by skill (e.g. Python, Guitar, French)...">
+      </div>
+
+      <div class="filter-controls">
+        <div class="type-buttons">
+          <button class="type-btn active" data-type="ALL">All Posts</button>
+          <button class="type-btn" data-type="OFFER">Offers Only</button>
+          <button class="type-btn" data-type="REQUEST">Requests Only</button>
+        </div>
+
+        <select id="category-filter">
+          <option value="ALL">All Categories</option>
+          <option value="Programming">Programming &amp; Tech</option>
+          <option value="Languages">Languages</option>
+          <option value="Design">Design &amp; Creative</option>
+          <option value="Music">Music &amp; Arts</option>
+          <option value="Academics">Academics &amp; Math</option>
+          <option value="Fitness">Fitness &amp; Lifestyle</option>
+          <option value="Other">Other Skills</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Cards Grid -->
+    <section id="cards-grid" class="cards-grid">
+      <!-- Rendered by JavaScript -->
+    </section>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state hidden">
+      <i class="fa-solid fa-handshake-slash"></i>
+      <h3>No matches found</h3>
+      <p>Be the first to post an offer or request a skill!</p>
+      <button class="btn btn-secondary" onclick="openModal()">+ Create Post</button>
+    </div>
+  </main>
+
+  <!-- Create Post Modal -->
+  <div id="swap-modal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Create a Skill Post</h3>
+        <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="swap-form">
+        <div class="form-group">
+          <label>What type of post is this? *</label>
+          <div class="radio-cards">
+            <label class="radio-label">
+              <input type="radio" name="post-type" value="OFFER" checked>
+              <div class="radio-pill offer-pill">
+                <i class="fa-solid fa-chalkboard-user"></i> Offering a Skill
+              </div>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="post-type" value="REQUEST">
+              <div class="radio-pill request-pill">
+                <i class="fa-solid fa-graduation-cap"></i> Requesting a Skill
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="user-name">Your Name *</label>
+            <input type="text" id="user-name" required placeholder="e.g. Rahul Sharma">
+          </div>
+
+          <div class="form-group">
+            <label for="user-contact">Contact (Email / Telegram / WhatsApp) *</label>
+            <input type="text" id="user-contact" required placeholder="e.g. rahul@example.com">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="offered-skill">Skill You Offer / Can Teach *</label>
+            <input type="text" id="offered-skill" required placeholder="e.g. Python &amp; Data Analysis">
+          </div>
+
+          <div class="form-group">
+            <label for="wanted-skill">Skill Wanted / Want to Learn *</label>
+            <input type="text" id="wanted-skill" required placeholder="e.g. Spoken English, Guitar basics">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="skill-category">Category *</label>
+            <select id="skill-category" required>
+              <option value="Programming">Programming &amp; Tech</option>
+              <option value="Languages">Languages</option>
+              <option value="Design">Design &amp; Creative</option>
+              <option value="Music">Music &amp; Arts</option>
+              <option value="Academics">Academics &amp; Math</option>
+              <option value="Fitness">Fitness &amp; Lifestyle</option>
+              <option value="Other">Other Skills</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="swap-mode">Swap Mode *</label>
+            <select id="swap-mode">
+              <option value="Online (Zoom / Meet)">Online (Zoom / Meet)</option>
+              <option value="In-Person">In-Person</option>
+              <option value="Hybrid (Both)">Hybrid (Both)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="post-notes">Short Description / Experience Note</label>
+          <textarea id="post-notes" rows="3" placeholder="Describe what you can teach and your preferred swap timing..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Swap</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contact Details Modal -->
+  <div id="contact-modal" class="modal-backdrop hidden">
+    <div class="modal-box contact-box">
+      <div class="modal-header">
+        <h3>Connect with Swapper</h3>
+        <button class="close-btn" onclick="closeContactModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="contact-body">
+        <p>Aap inke sath directly coordinate kar sakte hain:</p>
+        <div class="contact-highlight" id="contact-info-display"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeContactModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Swap Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-logo"><i class="fa-solid fa-people-arrows"></i></div>
+      <div>
+        <h1>Skill Swap Board</h1>
+        <p>Learn together, grow together</p>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal()">
+      <i class="fa-solid fa-plus"></i> Post a Skill
+    </button>
+  </header>
+
+  <main class="container">
+    <!-- Quick Stats -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-count" id="stat-all">0</span>
+        <span class="stat-label">Total Swaps</span>
+      </div>
+      <div class="stat-item stat-offer">
+        <span class="stat-count" id="stat-offers">0</span>
+        <span class="stat-label">Skills Offered</span>
+      </div>
+      <div class="stat-item stat-request">
+        <span class="stat-count" id="stat-requests">0</span>
+        <span class="stat-label">Skills Requested</span>
+      </div>
+    </section>
+
+    <!-- Filters & Search -->
+    <section class="filter-card">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" placeholder="Search by skill (e.g. Python, Guitar, French)...">
+      </div>
+
+      <div class="filter-controls">
+        <div class="type-buttons">
+          <button class="type-btn active" data-type="ALL">All Posts</button>
+          <button class="type-btn" data-type="OFFER">Offers Only</button>
+          <button class="type-btn" data-type="REQUEST">Requests Only</button>
+        </div>
+
+        <select id="category-filter">
+          <option value="ALL">All Categories</option>
+          <option value="Programming">Programming &amp; Tech</option>
+          <option value="Languages">Languages</option>
+          <option value="Design">Design &amp; Creative</option>
+          <option value="Music">Music &amp; Arts</option>
+          <option value="Academics">Academics &amp; Math</option>
+          <option value="Fitness">Fitness &amp; Lifestyle</option>
+          <option value="Other">Other Skills</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Cards Grid -->
+    <section id="cards-grid" class="cards-grid">
+      <!-- Rendered by JavaScript -->
+    </section>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state hidden">
+      <i class="fa-solid fa-handshake-slash"></i>
+      <h3>No matches found</h3>
+      <p>Be the first to post an offer or request a skill!</p>
+      <button class="btn btn-secondary" onclick="openModal()">+ Create Post</button>
+    </div>
+  </main>
+
+  <!-- Create Post Modal -->
+  <div id="swap-modal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Create a Skill Post</h3>
+        <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="swap-form">
+        <div class="form-group">
+          <label>What type of post is this? *</label>
+          <div class="radio-cards">
+            <label class="radio-label">
+              <input type="radio" name="post-type" value="OFFER" checked>
+              <div class="radio-pill offer-pill">
+                <i class="fa-solid fa-chalkboard-user"></i> Offering a Skill
+              </div>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="post-type" value="REQUEST">
+              <div class="radio-pill request-pill">
+                <i class="fa-solid fa-graduation-cap"></i> Requesting a Skill
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="user-name">Your Name *</label>
+            <input type="text" id="user-name" required placeholder="e.g. Rahul Sharma">
+          </div>
+
+          <div class="form-group">
+            <label for="user-contact">Contact (Email / Telegram / WhatsApp) *</label>
+            <input type="text" id="user-contact" required placeholder="e.g. rahul@example.com">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="offered-skill">Skill You Offer / Can Teach *</label>
+            <input type="text" id="offered-skill" required placeholder="e.g. Python &amp; Data Analysis">
+          </div>
+
+          <div class="form-group">
+            <label for="wanted-skill">Skill Wanted / Want to Learn *</label>
+            <input type="text" id="wanted-skill" required placeholder="e.g. Spoken English, Guitar basics">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="skill-category">Category *</label>
+            <select id="skill-category" required>
+              <option value="Programming">Programming &amp; Tech</option>
+              <option value="Languages">Languages</option>
+              <option value="Design">Design &amp; Creative</option>
+              <option value="Music">Music &amp; Arts</option>
+              <option value="Academics">Academics &amp; Math</option>
+              <option value="Fitness">Fitness &amp; Lifestyle</option>
+              <option value="Other">Other Skills</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="swap-mode">Swap Mode *</label>
+            <select id="swap-mode">
+              <option value="Online (Zoom / Meet)">Online (Zoom / Meet)</option>
+              <option value="In-Person">In-Person</option>
+              <option value="Hybrid (Both)">Hybrid (Both)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="post-notes">Short Description / Experience Note</label>
+          <textarea id="post-notes" rows="3" placeholder="Describe what you can teach and your preferred swap timing..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Swap</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contact Details Modal -->
+  <div id="contact-modal" class="modal-backdrop hidden">
+    <div class="modal-box contact-box">
+      <div class="modal-header">
+        <h3>Connect with Swapper</h3>
+        <button class="close-btn" onclick="closeContactModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="contact-body">
+        <p>Aap inke sath directly coordinate kar sakte hain:</p>
+        <div class="contact-highlight" id="contact-info-display"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeContactModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
